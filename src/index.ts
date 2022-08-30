@@ -2,13 +2,15 @@ import * as fs from "fs";
 import dotenv from 'dotenv';
 import {Dimensions} from "./interfaces/Dimensions.interface";
 import {Generator} from "./classes/Generator.class";
+import path from "path";
 dotenv.config()
 
 const getInputFiles = (): Promise<string[]> => {
+    const authorizedFormats = [".png", ".jpg", ".pjeg"]
     return new Promise<string[]>((resolve, reject) => {
         fs.readdir(process.env.INPUT_FOLDER as string, (err, files) => {
             if (err) reject(err)
-            resolve(files)
+            resolve(files.filter(file => authorizedFormats.includes(path.extname(file).toLowerCase())))
         })
     })
 }
